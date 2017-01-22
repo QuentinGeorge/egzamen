@@ -1,0 +1,43 @@
+{
+  "name": "egzamen",
+  "version": "0.0.1",
+  "description": "RIA end of course test January 2017",
+  "main": "bin/server.js",
+  "repository": {
+    "url": "git@github.com:QuentinGeorge/egzamen.git",
+    "type": "git"
+  },
+  "author": "Quentin George <quentingeorge7@gmail.com>",
+  "license": "MIT",
+  "browser": {
+    "vue": "vue/dist/vue.common"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^3.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.16.0",
+    "express": "^4.14.0",
+    "jeyo-distans": "^0.2.0",
+    "mitan-eko": "^0.1.0",
+    "mongodb": "^2.2.21",
+    "pug": "^2.0.0-beta6",
+    "reqwest": "^2.0.5",
+    "response-time": "^2.3.2",
+    "vue": "^2.1.10",
+    "vue-router": "^2.1.3",
+    "zouti": "^0.5.0"
+  }
+}
