@@ -1,7 +1,7 @@
 /** Exam RIA - 25/01/2017
 *** QuentinGeorge/egzamen
 ***
-*** /src/core/utils/api.js - Position checker utility
+*** /src/core/utils/position.js - Position checker utility
 ***
 *** Coded by Quentin George
 **/

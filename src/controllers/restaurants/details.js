@@ -36,14 +36,14 @@ export default function( oRequest, oResponse ) {
             let { _id, slug, name, address, latitude, longitude, hours } = oRestaurant,
                 oCleanRestaurant,
                 bIsOpen = false,
-                nDay = new Date().getDay(),
-                nHour = new Date().getHours() + ( new Date().getMinutes() / 60 ); // minutes divided by 60 to change number range from 0 to 60 into 0.0 to 1.0 because on our data half hours aren't represented by 30 but by 0.5
+                iDay = new Date().getDay(),
+                iHour = new Date().getHours() + ( new Date().getMinutes() / 60 ); // minutes divided by 60 to change number range from 0 to 60 into 0.0 to 1.0 because on our data half hours aren't represented by 30 but by 0.5
 
-            if ( nDay === 0 ) {
-                nDay = 7; // by default sunday is the number 0 and in the data base it's the 7th drawer of hours array not the first one
+            if ( iDay === 0 ) {
+                iDay = 7; // by default sunday is the number 0 and in the data base it's the 7th drawer of hours array not the first one
             }
 
-            if ( nHour >= hours[ nDay - 1 ][ 0 ] && nHour <= hours[ nDay - 1 ][ 1 ] ) {
+            if ( iHour >= hours[ iDay - 1 ][ 0 ] && iHour <= hours[ iDay - 1 ][ 1 ] ) {
                 bIsOpen = true;
             }
 
