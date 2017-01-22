@@ -1,0 +1,14 @@
+logs
+*.log
+npm-debug.log*
+.grunt
+build/Release
+node_modules
+jspm_packages
+.npm
+.node_repl_history
+.idea
+bin
+.vagrant
+static/css
+static/js
