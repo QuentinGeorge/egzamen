@@ -1,0 +1,62 @@
+/** Exam RIA - 25/01/2017
+*** QuentinGeorge/egzamen
+***
+*** /src/controllers/restaurants/details.js - Controller for restaurants details
+***
+*** Coded by Quentin George
+**/
+
+import getRestaurants from "../../models/restaurants";
+import { send, error } from "../../core/utils/api";
+import { ObjectID } from "mongodb";
+import distance from "jeyo-distans";
+import checkPosition from "../../core/utils/position";
+
+export default function( oRequest, oResponse ) {
+
+    let sRestaurantID = ( oRequest.params.id || "" ).trim(),
+        oCurrentPosition;
+
+    if ( !sRestaurantID ) {
+        error( oRequest, oResponse, "Invalid ID!", 400 );
+    }
+
+    oCurrentPosition = checkPosition( +oRequest.query.latitude, +oRequest.query.longitude );
+
+    getRestaurants()
+        .findOne( {
+            "_id": new ObjectID( sRestaurantID ),
+            "deleted_at": null,
+        } )
+        .then( ( oRestaurant ) => {
+            if ( !oRestaurant ) {
+                return error( oRequest, oResponse, "Unknown Restaurant", 404 );
+            }
+
+            let { _id, slug, name, address, latitude, longitude, hours } = oRestaurant,
+                oCleanRestaurant,
+                bIsOpen = false,
+                nDay = new Date().getDay(),
+                nHour = new Date().getHours() + ( new Date().getMinutes() / 60 ); // minutes divided by 60 to change number range from 0 to 60 into 0.0 to 1.0 because on our data half hours aren't represented by 30 but by 0.5
+
+            if ( nDay === 0 ) {
+                nDay = 7; // by default sunday is the number 0 and in the data base it's the 7th drawer of hours array not the first one
+            }
+
+            if ( nHour >= hours[ nDay - 1 ][ 0 ] && nHour <= hours[ nDay - 1 ][ 1 ] ) {
+                bIsOpen = true;
+            }
+
+            oCleanRestaurant = {
+                "id": _id,
+                slug, name, address, latitude, longitude, hours, bIsOpen,
+            };
+
+            if ( oCurrentPosition ) {
+                oCleanRestaurant.distance = distance( oCurrentPosition, oCleanRestaurant ) * 1000;
+            }
+
+            send( oRequest, oResponse, oCleanRestaurant );
+        } )
+        .catch( ( oError ) => error( oRequest, oResponse, oError ) );
+}

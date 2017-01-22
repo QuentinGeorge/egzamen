@@ -1,7 +1,7 @@
 /** Exam RIA - 25/01/2017
 *** QuentinGeorge/egzamen
 ***
-*** /src/core/express.js - Controller for restaurants list
+*** /src/controllers/restaurants/list.js - Controller for restaurants list
 ***
 *** Coded by Quentin George
 **/
