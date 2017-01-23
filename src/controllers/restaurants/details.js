@@ -6,9 +6,9 @@
 *** Coded by Quentin George
 **/
 
+import { ObjectID } from "mongodb";
 import getRestaurants from "../../models/restaurants";
 import { send, error } from "../../core/utils/api";
-import { ObjectID } from "mongodb";
 import distance from "jeyo-distans";
 import checkPosition from "../../core/utils/position";
 

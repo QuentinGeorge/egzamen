@@ -7,7 +7,6 @@
 **/
 
 import { ObjectID } from "mongodb";
-
 import getRestaurants from "../../models/restaurants";
 import { send, error } from "../../core/utils/api";
 import checkPosition from "../../core/utils/position";
@@ -22,7 +21,8 @@ export default function( oRequest, oResponse ) {
         sSlug = sName.toLowerCase().replace( " ", "_" ),
         sAddress = ( POST.address || "" ).trim(),
         oPosition = checkPosition( iLatitude, iLongitude ),
-        aHours, oRestaurant;
+        aHours = [],
+        oRestaurant;
 
     if ( !oPosition ) {
         return error( oRequest, oResponse, "Invalid position", 400 );
@@ -69,17 +69,19 @@ export default function( oRequest, oResponse ) {
     sName && ( oRestaurant.name = sName );
     sSlug && ( oRestaurant.slug = sSlug );
     sAddress && ( oRestaurant.address = sAddress );
+    aHours && ( oRestaurant.hours = aHours );
 
     getRestaurants()
         .insertOne( oRestaurant )
         .then( () => {
             send( oRequest, oResponse, {
                 "id": oRestaurant._id,
+                "slug": oRestaurant.slug,
                 "name": oRestaurant.name || null,
-                "slug": oRestaurant.slug || null,
                 "address": oRestaurant.address || null,
                 "latitude": oRestaurant.latitude,
                 "longitude": oRestaurant.longitude,
+                "hours": oRestaurant.hours,
             }, 201 );
         } )
         .catch( ( oError ) => error( oRequest, oResponse, oError ) );

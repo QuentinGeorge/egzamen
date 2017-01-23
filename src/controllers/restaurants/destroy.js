@@ -7,8 +7,8 @@
 **/
 
 import { ObjectID } from "mongodb";
-import { send, error } from "../../core/utils/api";
 import getRestaurants from "../../models/restaurants";
+import { send, error } from "../../core/utils/api";
 
 export default function( oRequest, oResponse ) {
 
