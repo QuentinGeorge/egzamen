@@ -26,7 +26,8 @@ var sUser = process.env.USER,
     ObjectID = Mongo.ObjectID,
     MongoClient = Mongo.MongoClient;
 
-
+// NOTE: As we see in class, gulp-sass cause somes issues when you try to run the reset-db task from inside the vagrant.
+// As we know that this will be the only task to run from vagrant, we put it inside an if, then add a return : from inside the vagrant, only the reset-db task will be accessible.
 if ( sUser === "vagrant" ) {
     gulp.task( "reset-db", function( fNext ) {
         MongoClient.connect( "mongodb://127.0.0.1:27017/egzamen", function( oError, oDB ) {
@@ -66,7 +67,6 @@ if ( sUser === "vagrant" ) {
                 } );
         } );
     } );
-
     return;
 }
 
