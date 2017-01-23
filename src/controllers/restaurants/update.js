@@ -6,70 +6,39 @@
 *** Coded by Quentin George
 **/
 
-import { ObjectID } from "mongodb";
 import getRestaurants from "../../models/restaurants";
 import { send, error } from "../../core/utils/api";
 import distance from "jeyo-distans";
 import checkPosition from "../../core/utils/position";
 
-const MAX_MOVE_DISTANCE = 0.1; // in km
+const MAX_MOVE_DISTANCE = 1.5; // in km
 
 export default function( oRequest, oResponse ) {
 
     // 1. get values
     const POST = oRequest.body;
 
-    let oRestaurantID,
+    let sRestaurantSlug = ( oRequest.params.slug || "" ).trim(),
         sAddress = ( POST.address || "" ).trim(),
         iLatitude = POST.latitude,
         iLongitude = POST.longitude,
-        aHours = [],
+        aHours = POST.hours,
         aModifications = [],
         oPosition;
 
-    aHours = [
-      [
-        POST.monday_opening,
-        POST.monday_closing
-      ],
-      [
-        POST.tuesday_opening,
-        POST.tuesday_closing
-      ],
-      [
-        POST.wednesday_opening,
-        POST.wednesday_closing
-      ],
-      [
-        POST.thursday_opening,
-        POST.thursday_closing
-      ],
-      [
-        POST.friday_opening,
-        POST.friday_closing
-      ],
-      [
-        POST.saturday_opening,
-        POST.saturday_closing
-      ],
-      [
-        POST.sunday_opening,
-        POST.sunday_closing
-      ]
-    ];
-
-    try {
-        oRestaurantID = new ObjectID( oRequest.params.id );
-    } catch ( oError ) {
-        return error( oRequest, oResponse, new Error( "Invalid ID!" ), 400 );
+    if ( !sRestaurantSlug ) {
+        error( oRequest, oResponse, "Invalid Slug!", 400 );
     }
 
     // 2. check if restaurant exists
     getRestaurants()
         .findOne( {
-            "_id": oRestaurantID,
+            "slug": sRestaurantSlug,
         } )
         .then( ( oRestaurant ) => {
+
+            let oModificationsToApply = {};
+
             if ( !oRestaurant ) {
                 return error( oRequest, oResponse, new Error( "Unknown Restaurant" ), 404 );
             }
@@ -106,34 +75,25 @@ export default function( oRequest, oResponse ) {
             }
 
             // 4. apply modifications
-            return checkRestaurant( oRestaurantID )
-                .then( () => {
+            if ( aModifications.length === 0 ) {
+                return error( oRequest, oResponse, new Error( "No changes" ), 400 );
+            }
 
-                    let oModificationsToApply = {};
+            aModifications.forEach( ( sPropertyName ) => {
+                oModificationsToApply[ sPropertyName ] = oRestaurant[ sPropertyName ];
+            } );
 
-                    if ( aModifications.length === 0 ) {
-                        return error( oRequest, oResponse, new Error( "No changes" ), 400 );
+            return getRestaurants()
+                .updateOne( {
+                    "slug": oRestaurant.slug,
+                }, {
+                    "$set": oModificationsToApply,
+                } )
+                .then( ( { matchedCount, modifiedCount } ) => {
+                    if ( matchedCount !== 1 || modifiedCount !== 1 ) {
+                        return error( oRequest, oResponse, new Error( "Unknown save error" ), 500 );
                     }
-
-                    aModifications.forEach( ( sPropertyName ) => {
-                        oModificationsToApply[ sPropertyName ] = oRestaurant[ sPropertyName ];
-                    } );
-
-                    oModificationsToApply.updated_at = new Date();
-
-                    return getRestaurants()
-                        .updateOne( {
-                            "_id": oRestaurant._id,
-                        }, {
-                            "$set": oModificationsToApply,
-                        } )
-                        .then( ( { matchedCount, modifiedCount } ) => {
-                            if ( matchedCount !== 1 || modifiedCount !== 1 ) {
-                                return error( oRequest, oResponse, new Error( "Unknown save error" ), 500 );
-                            }
-
-                            return send( oRequest, oResponse, null, 204 );
-                        } );
+                    return send( oRequest, oResponse, null, 204 );
                 } );
         } )
         .catch( ( oError ) => error( oRequest, oResponse, oError ) );

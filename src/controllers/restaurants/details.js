@@ -12,7 +12,7 @@ import { send, error } from "../../core/utils/api";
 export default function( oRequest, oResponse ) {
 
     let sRestaurantSlug = ( oRequest.params.slug || "" ).trim();
-
+    
     if ( !sRestaurantSlug ) {
         error( oRequest, oResponse, "Invalid Slug!", 400 );
     }
