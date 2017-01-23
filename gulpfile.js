@@ -31,30 +31,30 @@ var sUser = process.env.USER,
 if ( sUser === "vagrant" ) {
     gulp.task( "reset-db", function( fNext ) {
         MongoClient.connect( "mongodb://127.0.0.1:27017/egzamen", function( oError, oDB ) {
-            var fDataParser;
+            // var fDataParser;
 
             if ( oError ) {
                 gUtil.beep();
                 return fNext( oError );
             }
 
-            fDataParser = function( oElt ) {
-                oElt._id = new ObjectID( oElt._id.$oid );
-                if ( oElt.bank && oElt.bank.$oid ) {
-                    oElt.bank = new ObjectID( oElt.bank.$oid );
-                }
-                oElt.created_at = new Date( oElt.created_at );
-                oElt.updated_at = new Date( oElt.updated_at );
-                if ( oElt.deleted_at ) {
-                    oElt.deleted_at = new Date( oElt.deleted_at );
-                }
-                return oElt;
-            };
+            // fDataParser = function( oElt ) {
+            //     oElt._id = new ObjectID( oElt._id.$oid );
+            //     if ( oElt.restaurant && oElt.restaurant.$oid ) {
+            //         oElt.restaurant = new ObjectID( oElt.restaurant.$oid );
+            //     }
+            //     oElt.created_at = new Date( oElt.created_at );
+            //     oElt.updated_at = new Date( oElt.updated_at );
+            //     if ( oElt.deleted_at ) {
+            //         oElt.deleted_at = new Date( oElt.deleted_at );
+            //     }
+            //     return oElt;
+            // };
 
-            oDB
-                .dropDatabase()
+            oDB.dropDatabase()
                 .then( function() {
-                    return oDB.collection( "restaurants" ).insertMany( require( __dirname + "/data/export.json" ).map( fDataParser ) );
+                    // return oDB.collection( "restaurants" ).insertMany( require( __dirname + "/data/export.json" ).map( fDataParser ) );
+                    return oDB.collection( "restaurants" ).insertMany( require( __dirname + "/data/export.json" ) );
                 } )
                 .then( function() {
                     oDB.close();

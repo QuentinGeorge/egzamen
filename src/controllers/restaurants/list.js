@@ -12,7 +12,7 @@ import distance from "jeyo-distans";
 import checkPosition from "../../core/utils/position";
 
 const ARC_KILOMETER = 0.009259, // 1 décimale de lat/lng vaut X km.
-    DEFAULT_RADIUS = 10,
+    DEFAULT_RADIUS = 5,
     MAX_RADIUS = 30;
 
 export default function( oRequest, oResponse ) {
@@ -49,12 +49,18 @@ export default function( oRequest, oResponse ) {
 
             aCleanRestaurants = aRestaurants.map( ( { slug, name, address, latitude, longitude } ) => {
                 return {
-                    name, slug, adress, latitude, longitude,
+                    name, slug, address, latitude, longitude,
+                    "distance": distance( oCurrentPosition, { latitude, longitude } ) * 1000,
                 };
             } );
 
             // sort by distance
             aCleanRestaurants.sort( ( oRestaurantOne, oRestaurantTwo ) => oRestaurantOne.distance - oRestaurantTwo.distance );
+
+            // clean useless informations
+            aCleanRestaurants.forEach( ( aElt ) => {
+                delete aElt.distance;
+            } );
 
             send( oRequest, oResponse, aCleanRestaurants );
         } )

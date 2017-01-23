@@ -39,11 +39,6 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
             </ul>
         </div>
     `,
-    mounted() {
-        return getBank()
-            .then( this.updatePosition )
-            .catch( this.showError );
-    },
     "methods": {
         updatePosition() {
             // 1. get user's position

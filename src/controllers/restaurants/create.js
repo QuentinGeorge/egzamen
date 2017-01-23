@@ -18,7 +18,7 @@ export default function( oRequest, oResponse ) {
     let iLatitude = +POST.latitude,
         iLongitude = +POST.longitude,
         sName = ( POST.name || "" ).trim(),
-        sSlug = sName.toLowerCase().replace( " ", "_" ),
+        sSlug = sName.toLowerCase().replace( " ", "-" ),
         sAddress = ( POST.address || "" ).trim(),
         oPosition = checkPosition( iLatitude, iLongitude ),
         aHours = [],
