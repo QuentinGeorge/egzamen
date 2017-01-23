@@ -20,6 +20,6 @@ oRouter.get( "/restaurants", list );
 oRouter.get( "/restaurants/:slug", details );
 oRouter.post( "/restaurants", create );
 oRouter.patch( "/restaurants/:slug", update );
-oRouter.delete( "/restaurants/:id", destroy );
+oRouter.delete( "/restaurants/:slug", destroy );
 
 export default oRouter;

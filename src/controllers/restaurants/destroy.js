@@ -6,29 +6,25 @@
 *** Coded by Quentin George
 **/
 
-import { ObjectID } from "mongodb";
 import getRestaurants from "../../models/restaurants";
 import { send, error } from "../../core/utils/api";
 
 export default function( oRequest, oResponse ) {
 
-    let oRestaurantID;
+    let sRestaurantSlug = ( oRequest.params.slug || "" ).trim();
 
-    try {
-        oRestaurantID = new ObjectID( oRequest.params.id );
-    } catch ( oError ) {
-        return error( oRequest, oResponse, new Error( "Invalid ID!" ), 400 );
+    if ( !sRestaurantSlug ) {
+        error( oRequest, oResponse, "Invalid Slug!", 400 );
     }
 
     getRestaurants()
         .deleteOne( {
-            "_id": oRestaurantID,
+            "slug": sRestaurantSlug,
         } )
         .then( ( { deletedCount } ) => {
             if ( deletedCount === 1 ) {
                 return send( oRequest, oResponse, null, 204 );
             }
-
             return error( oRequest, oResponse, "Unknown deletion error", 500 );
         } )
         .catch( ( oError ) => error( oRequest, oResponse, oError ) );
