@@ -14,7 +14,7 @@ import zouti from "zouti";
 
 import systemRoutes from "../routes/system";
 import restaurantsRoutes from "../routes/restaurants";
-// import pagesRoutes from "../routes/pages";
+import pagesRoutes from "../routes/pages";
 
 const APP_PORT = 12345;
 
@@ -36,16 +36,16 @@ fInit = function( iAppPort = APP_PORT ) {
         "extended": true,
     } ) );
 
-    // oApp.use( express.static( `${ __dirname }/../../static` ) );
+    oApp.use( express.static( `${ __dirname }/../../static` ) );
 
     // configure templates
-    // oApp.set( "views", `${ __dirname }/../views` );
-    // oApp.set( "view engine", "pug" );
+    oApp.set( "views", `${ __dirname }/../views` );
+    oApp.set( "view engine", "pug" );
 
     // routes
     oApp.use( systemRoutes );
     oApp.use( restaurantsRoutes );
-    // oApp.use( pagesRoutes );
+    oApp.use( pagesRoutes );
 
     // listening
     oApp.listen( iAppPort, () => {
