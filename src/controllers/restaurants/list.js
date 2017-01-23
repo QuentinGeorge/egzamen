@@ -41,7 +41,6 @@ export default function( oRequest, oResponse ) {
                 "$gt": oCurrentPosition.longitude - iSearchRadius,
                 "$lt": oCurrentPosition.longitude + iSearchRadius,
             },
-            "deleted_at": null,
         } )
         .toArray()
         .then( ( aRestaurants = [] ) => {

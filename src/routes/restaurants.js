@@ -17,7 +17,7 @@ import destroy from "../controllers/restaurants/destroy";
 let oRouter = new Router();
 
 oRouter.get( "/restaurants", list );
-oRouter.get( "/restaurants/:id", details );
+oRouter.get( "/restaurants/:slug", details );
 oRouter.post( "/restaurants", create );
 oRouter.patch( "/restaurants/:id", update );
 oRouter.delete( "/restaurants/:id", destroy );

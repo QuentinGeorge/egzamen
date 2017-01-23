@@ -6,34 +6,27 @@
 *** Coded by Quentin George
 **/
 
-import { ObjectID } from "mongodb";
 import getRestaurants from "../../models/restaurants";
 import { send, error } from "../../core/utils/api";
-import distance from "jeyo-distans";
-import checkPosition from "../../core/utils/position";
 
 export default function( oRequest, oResponse ) {
 
-    let sRestaurantID = ( oRequest.params.id || "" ).trim(),
-        oCurrentPosition;
+    let sRestaurantSlug = ( oRequest.params.slug || "" ).trim();
 
-    if ( !sRestaurantID ) {
-        error( oRequest, oResponse, "Invalid ID!", 400 );
+    if ( !sRestaurantSlug ) {
+        error( oRequest, oResponse, "Invalid Slug!", 400 );
     }
-
-    oCurrentPosition = checkPosition( +oRequest.query.latitude, +oRequest.query.longitude );
 
     getRestaurants()
         .findOne( {
-            "_id": new ObjectID( sRestaurantID ),
-            "deleted_at": null,
+            "slug": sRestaurantSlug,
         } )
         .then( ( oRestaurant ) => {
             if ( !oRestaurant ) {
                 return error( oRequest, oResponse, "Unknown Restaurant", 404 );
             }
 
-            let { _id, slug, name, address, latitude, longitude, hours } = oRestaurant,
+            let { slug, name, address, latitude, longitude, hours } = oRestaurant,
                 oCleanRestaurant,
                 bIsOpen = false,
                 iDay = new Date().getDay(),
@@ -48,13 +41,9 @@ export default function( oRequest, oResponse ) {
             }
 
             oCleanRestaurant = {
-                "id": _id,
-                slug, name, address, latitude, longitude, hours, bIsOpen,
+                slug, name, address, latitude, longitude, hours,
+                "is-open": bIsOpen,
             };
-
-            if ( oCurrentPosition ) {
-                oCleanRestaurant.distance = distance( oCurrentPosition, oCleanRestaurant ) * 1000;
-            }
 
             send( oRequest, oResponse, oCleanRestaurant );
         } )
