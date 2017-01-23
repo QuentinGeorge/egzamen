@@ -53,10 +53,7 @@ if ( sUser === "vagrant" ) {
             oDB
                 .dropDatabase()
                 .then( function() {
-                    return oDB.collection( "banks" ).insertMany( require( __dirname + "/_dev/banks.json" ).map( fDataParser ) );
-                } )
-                .then( function() {
-                    return oDB.collection( "terminals" ).insertMany( require( __dirname + "/_dev/terminals.json" ).map( fDataParser ) );
+                    return oDB.collection( "restaurants" ).insertMany( require( __dirname + "/data/export.json" ).map( fDataParser ) );
                 } )
                 .then( function() {
                     oDB.close();
@@ -76,11 +73,7 @@ if ( sUser === "vagrant" ) {
 gulp.task( "styles", function() {
     return gulp
         .src( "static/sass/**/*.scss" )
-        .pipe( gSass( {
-            "includePaths": [
-                require( "bourbon" ).includePaths,
-            ],
-        } ).on( "error", gSass.logError ) )
+        .pipe( gSass().on( "error", gSass.logError ) )
         .pipe( gulp.dest( "static/css" ) )
 } );
 
