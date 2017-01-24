@@ -34,7 +34,8 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
                     <router-link :to="'/' + elt.id">
                         <strong>{{ elt.name ? elt.name : "Unknown" }}</strong>
                         <address>{{ elt.address }}</address>
-                        <span class="is-open">{{ elt.bIsOpen }}</span>
+                        <p v-if="!elt.open">Fermer</p>
+                        <p v-if="elt.open">Ouvert</p>
                     </router-link>
                 </li>
             </ul>
@@ -46,9 +47,9 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
     "methods": {
         getPosition() {
             // 1. get user's position
-            navigator.geolocation.getCurrentPosition( this.geoSuccess, this.geoError, GEOLOCATION_OPTIONS );
+            navigator.geolocation.getCurrentPosition( this.getRestaurantsList, this.geoError, GEOLOCATION_OPTIONS );
         },
-        geoSuccess( { coords } ) {
+        getRestaurantsList( { coords } ) {
             console.log( "latitude:", coords.latitude );
             console.log( "longitude:", coords.longitude );
             // 2. get restaurants at position
@@ -59,14 +60,26 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
                     "latitude": coords.latitude,
                     "longitude": coords.longitude,
                 },
-                "success": this.ajaxSuccess,
-                "error": this.showError,
-            } );
-        },
-        ajaxSuccess( oResponse ) {
-            console.log( "response", oResponse );
-            this.loaded = true;
-            this.restaurants = oResponse.data;
+            } )
+            .then( ( oResponse ) => {
+                // 3. get restaurants open status
+                this.restaurants = oResponse.data.map( ( oRestaurant ) => {
+                    oRestaurant.open = false;
+                    reqwest( {
+                        "url": "/restaurants/" + oRestaurant.id,
+                        "method": "get",
+                        "data": {},
+                    } )
+                    .then( ( oResponse ) => {
+                        oRestaurant.open = oResponse.data.open;
+                    } )
+                    .catch( this.showError );
+
+                    return oRestaurant;
+                } );
+                this.loaded = true;
+            } )
+            .catch( this.showError );
         },
         showError( oError ) {
             this.loaded = true;

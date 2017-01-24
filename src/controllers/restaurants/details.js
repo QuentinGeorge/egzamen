@@ -43,7 +43,7 @@ export default function( oRequest, oResponse ) {
 
             oCleanRestaurant = {
                 slug, name, address, latitude, longitude, hours,
-                "is-open": bIsOpen,
+                "open": bIsOpen,
             };
 
             send( oRequest, oResponse, oCleanRestaurant );
