@@ -8,7 +8,6 @@
 
 import Vue from "vue";
 import reqwest from "reqwest";
-import getLocation from "../../utils/location-manager.js";
 
 let oRestaurantDetails = Vue.component( "restaurant-details", {
     "data": function() {
