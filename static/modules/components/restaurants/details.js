@@ -31,8 +31,10 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
             <div v-if="loaded">
                 <h2>{{ restaurant.name ? restaurant.name : "Unknown" }}<span> ({{ restaurant.slug }})</span></h2>
                 <address>Address&nbsp;: {{ restaurant.address }}</address>
+                <h3>Position</h3>
                 <p>Latitude&nbsp;: {{ restaurant.latitude }}</p>
                 <p>Longitude&nbsp;: {{ restaurant.longitude }}</p>
+                <h3>Horaires</h3>
                 <table>
                     <tbody>
                         <tr>
@@ -82,6 +84,7 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
     },
     "methods": {
         fetchInfos( sRestaurantId ) {
+            // 1. get informations
             reqwest( {
                 "url": `/restaurants/${ sRestaurantId }`,
                 "method": "get",
@@ -89,14 +92,41 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
             } )
             .then( ( oResponse ) => {
                 this.restaurant = oResponse.data;
-                console.log(this.restaurant.hours);
+                this.prepareHours();
                 this.loaded = true;
             } )
             .catch( this.showError );
         },
-        showError( { message } ) {
+        prepareHours() {
+            // 2. reformat hours
+            let aSplited = [],
+                iCountDay = 0,
+                iCountHour = 0,
+                sPrepared;
+
+            this.restaurant.hours.forEach( ( aElt, i ) => {
+                iCountDay = i;
+                aElt.forEach( ( iElt, j ) => {
+                    iCountHour = j;
+                    aSplited = iElt.toString().split(".");
+
+                    if ( aSplited.length > 2 || aSplited.length === null ) {
+                        this.showError( "Wrong hour format !" );
+                    }
+
+                    if ( aSplited.length === 2 ) {
+                        aSplited[ 1 ] *= 6;
+                        sPrepared = aSplited[ 0 ] + ":" + aSplited[ 1 ];
+                    } else {
+                        sPrepared = aSplited[ 0 ] + ":00";
+                    }
+                    this.restaurant.hours[ iCountDay ][ iCountHour ] = sPrepared;
+                } );
+            } );
+        },
+        showError( oError ) {
             this.loaded = true;
-            this.error = message;
+            this.error = oError;
         },
     },
 } );
