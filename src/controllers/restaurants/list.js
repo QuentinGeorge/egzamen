@@ -46,8 +46,9 @@ export default function( oRequest, oResponse ) {
         .then( ( aRestaurants = [] ) => {
             let aCleanRestaurants;
 
-            aCleanRestaurants = aRestaurants.map( ( { slug, name, address, latitude, longitude } ) => {
+            aCleanRestaurants = aRestaurants.map( ( { _id, slug, name, address, latitude, longitude } ) => {
                 return {
+                    "id": _id,
                     name, slug, address, latitude, longitude,
                     "distance": distance( oCurrentPosition, { latitude, longitude } ) * 1000,
                 };

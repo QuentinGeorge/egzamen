@@ -6,6 +6,7 @@
 *** Coded by Quentin George
 **/
 
+import { ObjectID } from "mongodb";
 import getRestaurants from "../../models/restaurants";
 import { send, error } from "../../core/utils/api";
 import distance from "jeyo-distans";
@@ -18,7 +19,7 @@ export default function( oRequest, oResponse ) {
     // 1. get values
     const POST = oRequest.body;
 
-    let sRestaurantSlug = ( oRequest.params.slug || "" ).trim(),
+    let oRestaurantID,
         sAddress = ( POST.address || "" ).trim(),
         iLatitude = POST.latitude,
         iLongitude = POST.longitude,
@@ -26,14 +27,16 @@ export default function( oRequest, oResponse ) {
         aModifications = [],
         oPosition;
 
-    if ( !sRestaurantSlug ) {
-        error( oRequest, oResponse, "Invalid Slug!", 400 );
+    try {
+        oRestaurantID = new ObjectID( oRequest.params.id );
+    } catch ( oError ) {
+        return error( oRequest, oResponse, new Error( "Invalid ID!" ), 400 );
     }
 
     // 2. check if restaurant exists
     getRestaurants()
         .findOne( {
-            "slug": sRestaurantSlug,
+            "_id": oRestaurantID,
         } )
         .then( ( oRestaurant ) => {
 
@@ -85,7 +88,7 @@ export default function( oRequest, oResponse ) {
 
             return getRestaurants()
                 .updateOne( {
-                    "slug": oRestaurant.slug,
+                    "_id": oRestaurant._id,
                 }, {
                     "$set": oModificationsToApply,
                 } )
