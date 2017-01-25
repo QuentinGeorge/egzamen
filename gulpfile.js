@@ -26,8 +26,7 @@ var sUser = process.env.USER,
     ObjectID = Mongo.ObjectID,
     MongoClient = Mongo.MongoClient;
 
-// NOTE: As we see in class, gulp-sass cause somes issues when you try to run the reset-db task from inside the vagrant.
-// As we know that this will be the only task to run from vagrant, we put it inside an if, then add a return : from inside the vagrant, only the reset-db task will be accessible.
+// To avoid issues between gulp-sass & reset-db task, put reset-db task inside an if to be accessible only inside the vagrant.
 if ( sUser === "vagrant" ) {
     gulp.task( "reset-db", function( fNext ) {
         MongoClient.connect( "mongodb://127.0.0.1:27017/egzamen", function( oError, oDB ) {
@@ -39,13 +38,16 @@ if ( sUser === "vagrant" ) {
 
             oDB.dropDatabase()
                 .then( function() {
+                    // Import json data into DB collection
                     return oDB.collection( "restaurants" ).insertMany( require( __dirname + "/data/export.json" ) );
                 } )
                 .then( function() {
                     oDB.close();
+                    // If successfully created send confirmation message in terminal
                     gUtil.log( gUtil.colors.green( "DB has been resetted." ) );
                     fNext();
                 } )
+                // Manage errors
                 .catch( function( oError ) {
                     oDB.close();
                     fNext( oError );
@@ -55,6 +57,7 @@ if ( sUser === "vagrant" ) {
     return;
 }
 
+// Compile sass Task
 gulp.task( "styles", function() {
     return gulp
         .src( "static/sass/**/*.scss" )
@@ -62,6 +65,7 @@ gulp.task( "styles", function() {
         .pipe( gulp.dest( "static/css" ) )
 } );
 
+// Lint JS Task
 gulp.task( "lint", function() {
     return gulp
         .src( [ "src/**/*.js", "static/modules/**/*.js" ] )
@@ -69,6 +73,7 @@ gulp.task( "lint", function() {
         .pipe( gESLint.format() );
 } );
 
+// Compile es-2015 into JS Task
 gulp.task( "build", function() {
     return gulp
         .src( "src/**/*.js" )
@@ -76,12 +81,14 @@ gulp.task( "build", function() {
         .pipe( gulp.dest( "bin" ) );
 } );
 
+// Copy views to bin directory Task
 gulp.task( "views", function() {
     return gulp
         .src( "src/views/**" )
         .pipe( gulp.dest( "bin/views" ) );
 } );
 
+// Manage modules views Task
 gulp.task( "modules", function() {
     browserify( "static/modules/main.js" )
         .transform( babelify, {
@@ -92,10 +99,11 @@ gulp.task( "modules", function() {
         .pipe( gulp.dest( "static/js/" ) )
         .pipe( buffer() )
         .pipe( gRename( "app.min.js" ) )
-        .pipe( gUglify().on( "error", console.log ) )
+        .pipe( gUglify().on( "error", console.log ) ) // Minify js
         .pipe( gulp.dest( "static/js/" ) );
 } );
 
+// Watching modifications
 gulp.task( "watch", function() {
     gulp.watch( "src/**/*.js", [ "build" ] );
     gulp.watch( "src/views/**", [ "views" ] );
@@ -103,6 +111,7 @@ gulp.task( "watch", function() {
     gulp.watch( "static/modules/**/*.js", [ "modules" ] );
 } );
 
+// Create runnable tasks from terminal
 gulp.task( "default", [ "build", "views", "styles", "modules" ] );
 
 gulp.task( "work", [ "default", "watch" ] );

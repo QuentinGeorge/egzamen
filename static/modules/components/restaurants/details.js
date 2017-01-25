@@ -74,8 +74,8 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
                         </tr>
                     </tbody>
                 </table>
-                <p v-if="!restaurant.open">Fermer</p>
-                <p v-if="restaurant.open">Ouvert</p>
+                <p class="fermer" v-if="!restaurant.open">Fermer</p>
+                <p class="ouvert" v-if="restaurant.open">Ouvert</p>
             </div>
         </div>
     `,

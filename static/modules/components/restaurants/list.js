@@ -34,8 +34,8 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
                     <router-link :to="'/' + elt.id">
                         <strong>{{ elt.name ? elt.name : "Unknown" }}</strong>
                         <address>{{ elt.address }}</address>
-                        <p v-if="!elt.open">Fermer</p>
-                        <p v-if="elt.open">Ouvert</p>
+                        <p class="fermer" v-if="!elt.open">Fermer</p>
+                        <p class="ouvert" v-if="elt.open">Ouvert</p>
                     </router-link>
                 </li>
             </ul>

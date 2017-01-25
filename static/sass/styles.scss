@@ -5,3 +5,108 @@
 ***
 *** Coded by Quentin George
 **/
+
+$segoeUIStack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+html {
+    font: normal 16px/1.5 $segoeUIStack;
+    color: #000;
+    background-color: #fff;
+}
+
+.wrapper {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    background-color: #ddd;
+    border-radius: 20px;
+}
+
+header, footer {
+    text-align: center;
+    padding: 20px;
+}
+
+a {
+    color: #4078C0;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+ul {
+    margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+    list-style: none;
+}
+
+ul a {
+    display: block;
+    padding: 20px;
+    &:hover {
+        text-decoration: none;
+        background-color: #51A7E8;
+        color: #ddd;
+        border-radius: 10px;
+    }
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+}
+
+h2 span {
+    font-size: 1rem;
+    padding-left: 5px;
+}
+
+a strong, h3 {
+    font-size: 1.5rem;
+    margin-top: 2em;
+    margin-bottom: 0;
+}
+
+.fermer {
+    color: red;
+}
+
+.ouvert {
+    color: green;
+}
+
+.restaurant-details {
+    margin: 0 20px 20px 20px;
+}
+
+.router-link-active {
+    top: -20px;
+    font-size: 1.2rem;
+    padding: 10px 20px 13px 10px;
+    background-color: #4078C0;
+    color: #ddd;
+    border-radius: 10px;
+    &:hover {
+        text-decoration: none;
+        background-color: #51A7E8;
+    }
+}
+
+table {
+    margin: 0 0 30px -20px;
+}
+
+tr, td {
+    padding: 5px 20px;
+}
