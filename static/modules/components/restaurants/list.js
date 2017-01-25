@@ -34,6 +34,7 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
                     <router-link :to="'/' + elt.id">
                         <strong>{{ elt.name ? elt.name : "Unknown" }}</strong>
                         <address>{{ elt.address }}</address>
+                        <p>Distance&nbsp;: {{ elt.distance }} m</p>
                         <p class="fermer" v-if="!elt.open">Fermer</p>
                         <p class="ouvert" v-if="elt.open">Ouvert</p>
                     </router-link>
@@ -42,13 +43,10 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
         </div>
     `,
     mounted() {
-        this.getPosition();
+        // 1. get user's position
+        navigator.geolocation.getCurrentPosition( this.getRestaurantsList, this.showError, GEOLOCATION_OPTIONS );
     },
     "methods": {
-        getPosition() {
-            // 1. get user's position
-            navigator.geolocation.getCurrentPosition( this.getRestaurantsList, this.geoError, GEOLOCATION_OPTIONS );
-        },
         getRestaurantsList( { coords } ) {
             console.log( "latitude:", coords.latitude );
             console.log( "longitude:", coords.longitude );

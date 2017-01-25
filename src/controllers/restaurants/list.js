@@ -57,11 +57,6 @@ export default function( oRequest, oResponse ) {
             // sort by distance
             aCleanRestaurants.sort( ( oRestaurantOne, oRestaurantTwo ) => oRestaurantOne.distance - oRestaurantTwo.distance );
 
-            // clean useless informations
-            aCleanRestaurants.forEach( ( aElt ) => {
-                delete aElt.distance;
-            } );
-
             send( oRequest, oResponse, aCleanRestaurants );
         } )
         .catch( ( oError ) => error( oRequest, oResponse, oError ) );

@@ -8,6 +8,10 @@
 
 import Vue from "vue";
 import reqwest from "reqwest";
+import distance from "jeyo-distans";
+import checkPosition from "../../../../src/core/utils/position";
+
+const GEOLOCATION_OPTIONS = { "enableHighAccuracy": true };
 
 let oRestaurantDetails = Vue.component( "restaurant-details", {
     "data": function() {
@@ -31,7 +35,7 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
             <div v-if="loaded">
                 <h2>{{ restaurant.name ? restaurant.name : "Unknown" }}<span> ({{ restaurant.slug }})</span></h2>
                 <address>Address&nbsp;: {{ restaurant.address }}</address>
-                <h3>Position</h3>
+                <h3>Position&nbsp;: <span>{{ restaurant.distance }} m</span></h3>
                 <p>Latitude&nbsp;: {{ restaurant.latitude }}</p>
                 <p>Longitude&nbsp;: {{ restaurant.longitude }}</p>
                 <h3>Horaires</h3>
@@ -80,25 +84,36 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
         </div>
     `,
     mounted() {
-        this.fetchInfos( this.$route.params.id );
+        // 1. get user's position
+        navigator.geolocation.getCurrentPosition( this.fetchInfos, this.showError, GEOLOCATION_OPTIONS );
     },
     "methods": {
-        fetchInfos( sRestaurantId ) {
-            // 1. get informations
+        fetchInfos( { coords } ) {
+
+            let oCurrentPosition = checkPosition( coords.latitude, coords.longitude ),
+                oRestaurantPosition;
+
+            // 2. get informations
             reqwest( {
-                "url": `/restaurants/${ sRestaurantId }`,
+                "url": `/restaurants/${ this.$route.params.id }`,
                 "method": "get",
                 "data": {},
             } )
             .then( ( oResponse ) => {
                 this.restaurant = oResponse.data;
+                // 3. get distance
+                oRestaurantPosition = {
+                    "latitude": this.restaurant.latitude,
+                    "longitude": this.restaurant.longitude,
+                };
+                this.restaurant.distance = distance( oCurrentPosition, oRestaurantPosition ) * 1000;
                 this.prepareHours();
                 this.loaded = true;
             } )
             .catch( this.showError );
         },
         prepareHours() {
-            // 2. reformat hours
+            // 4. reformat hours
             let aSplited = [],
                 iCountDay = 0,
                 iCountHour = 0,
@@ -111,7 +126,7 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
                     aSplited = iElt.toString().split( "." );
 
                     if ( aSplited.length > 2 || aSplited.length === null ) {
-                        this.showError( "Wrong hour format !" );
+                        this.showError( "Wrong hour format !", 400 );
                     }
 
                     if ( aSplited.length === 2 ) {
