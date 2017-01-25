@@ -23,6 +23,8 @@ var sUser = process.env.USER,
     buffer = require( "vinyl-buffer" ),
     gRename = require( "gulp-rename" ),
     gUglify = require( "gulp-uglify" ),
+    gNotify = require( "gulp-notify" ),
+    gPlumber = require( "gulp-plumber" ),
     ObjectID = Mongo.ObjectID,
     MongoClient = Mongo.MongoClient;
 
@@ -61,7 +63,17 @@ if ( sUser === "vagrant" ) {
 gulp.task( "styles", function() {
     return gulp
         .src( "static/sass/**/*.scss" )
-        .pipe( gSass().on( "error", gSass.logError ) )
+        // Don't stop watch task if an error occured and warn with OS system pop-up
+        .pipe( gPlumber( {
+            errorHandler: gNotify.onError( {
+                title: "An error occured on Styles",
+                message: "<%= error.message %>"
+            } )
+        } ) )
+        // sass compilation, "compressed" => minify css
+        .pipe( gSass( { outputStyle: "compressed" } ).on( "error", gSass.logError ) )
+        // rename css output in .min.css
+        .pipe( gRename( { suffix: ".min" } ) )
         .pipe( gulp.dest( "static/css" ) )
 } );
 
@@ -77,6 +89,7 @@ gulp.task( "lint", function() {
 gulp.task( "build", function() {
     return gulp
         .src( "src/**/*.js" )
+        // Compile es2015-js files
         .pipe( gBabel() )
         .pipe( gulp.dest( "bin" ) );
 } );
@@ -98,20 +111,22 @@ gulp.task( "modules", function() {
         .pipe( sourceStream( "app.js" ) )
         .pipe( gulp.dest( "static/js/" ) )
         .pipe( buffer() )
+        // rename output js file
         .pipe( gRename( "app.min.js" ) )
-        .pipe( gUglify().on( "error", console.log ) ) // Minify js
+        // Minify js
+        .pipe( gUglify().on( "error", console.log ) )
         .pipe( gulp.dest( "static/js/" ) );
 } );
 
-// Watching modifications
+// Watching files modifications
 gulp.task( "watch", function() {
-    gulp.watch( "src/**/*.js", [ "build" ] );
+    gulp.watch( "src/**/*.js", [ "lint", "build" ] );
     gulp.watch( "src/views/**", [ "views" ] );
     gulp.watch( "static/sass/**/*.scss", [ "styles" ] );
-    gulp.watch( "static/modules/**/*.js", [ "modules" ] );
+    gulp.watch( "static/modules/**/*.js", [ "lint", "modules" ] );
 } );
 
 // Create runnable tasks from terminal
-gulp.task( "default", [ "build", "views", "styles", "modules" ] );
+gulp.task( "default", [ "views", "styles", "lint", "build", "modules" ] );
 
 gulp.task( "work", [ "default", "watch" ] );

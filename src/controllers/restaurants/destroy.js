@@ -28,6 +28,7 @@ export default function( oRequest, oResponse ) {
             if ( deletedCount === 1 ) {
                 return send( oRequest, oResponse, null, 204 );
             }
+            
             return error( oRequest, oResponse, "Unknown deletion error", 500 );
         } )
         .catch( ( oError ) => error( oRequest, oResponse, oError ) );

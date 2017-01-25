@@ -96,6 +96,7 @@ export default function( oRequest, oResponse ) {
                     if ( matchedCount !== 1 || modifiedCount !== 1 ) {
                         return error( oRequest, oResponse, new Error( "Unknown save error" ), 500 );
                     }
+                    
                     return send( oRequest, oResponse, null, 204 );
                 } );
         } )

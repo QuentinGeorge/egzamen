@@ -108,7 +108,7 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
                 iCountDay = i;
                 aElt.forEach( ( iElt, j ) => {
                     iCountHour = j;
-                    aSplited = iElt.toString().split(".");
+                    aSplited = iElt.toString().split( "." );
 
                     if ( aSplited.length > 2 || aSplited.length === null ) {
                         this.showError( "Wrong hour format !" );
@@ -116,9 +116,9 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
 
                     if ( aSplited.length === 2 ) {
                         aSplited[ 1 ] *= 6;
-                        sPrepared = aSplited[ 0 ] + ":" + aSplited[ 1 ];
+                        sPrepared = `${ aSplited[ 0 ] }:${ aSplited[ 1 ] }`;
                     } else {
-                        sPrepared = aSplited[ 0 ] + ":00";
+                        sPrepared = `${ aSplited[ 0 ] }:00`;
                     }
                     this.restaurant.hours[ iCountDay ][ iCountHour ] = sPrepared;
                 } );

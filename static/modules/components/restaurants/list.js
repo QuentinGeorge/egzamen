@@ -66,12 +66,12 @@ let oRestaurantsList = Vue.component( "restaurants-list", {
                 this.restaurants = oResponse.data.map( ( oRestaurant ) => {
                     oRestaurant.open = false;
                     reqwest( {
-                        "url": "/restaurants/" + oRestaurant.id,
+                        "url": `/restaurants/${ oRestaurant.id }`,
                         "method": "get",
                         "data": {},
                     } )
-                    .then( ( oResponse ) => {
-                        oRestaurant.open = oResponse.data.open;
+                    .then( ( oResp ) => {
+                        oRestaurant.open = oResp.data.open;
                     } )
                     .catch( this.showError );
 
