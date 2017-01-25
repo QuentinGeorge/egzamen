@@ -40,41 +40,18 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
                 <p>Longitude&nbsp;: {{ restaurant.longitude }}</p>
                 <h3>Horaires</h3>
                 <table>
-                    <tbody>
+                    <thead>
                         <tr>
                             <td></td>
                             <td><strong>Ouverture</strong></td>
                             <td><strong>Fermeture</strong></td>
                         </tr>
+                    </thead>
+                    <tbody v-for="elt in restaurant.hours">
                         <tr>
-                            <td><strong>Lundi</strong></td>
-                            <td>{{ restaurant.hours[ 0 ][ 0 ] }}</td>
-                            <td>{{ restaurant.hours[ 0 ][ 1 ] }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Mardi</strong></td>
-                            <td>{{ restaurant.hours[ 1 ][ 0 ] }}</td>
-                            <td>{{ restaurant.hours[ 1 ][ 1 ] }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Mercredi</strong></td>
-                            <td>{{ restaurant.hours[ 2 ][ 0 ] }}</td>
-                            <td>{{ restaurant.hours[ 2 ][ 1 ] }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Jeudi</strong></td>
-                            <td>{{ restaurant.hours[ 3 ][ 0 ] }}</td>
-                            <td>{{ restaurant.hours[ 3 ][ 1 ] }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Vendredi</strong></td>
-                            <td>{{ restaurant.hours[ 4 ][ 0 ] }}</td>
-                            <td>{{ restaurant.hours[ 4 ][ 1 ] }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Samedi</strong></td>
-                            <td>{{ restaurant.hours[ 5 ][ 0 ] }}</td>
-                            <td>{{ restaurant.hours[ 5 ][ 1 ] }}</td>
+                            <td><strong>{{ elt[ 0 ] }}</strong></td>
+                            <td>{{ elt[ 1 ] }}</td>
+                            <td>{{ elt[ 2 ] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -117,8 +94,18 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
             let aSplited = [],
                 iCountDay = 0,
                 iCountHour = 0,
-                sPrepared;
+                sFormated,
+                aFormatedHours = [
+                    [ "Lundi", "", "" ],
+                    [ "Mardi", "", "" ],
+                    [ "Mercredi", "", "" ],
+                    [ "Jeudi", "", "" ],
+                    [ "Vendredi", "", "" ],
+                    [ "Samedi", "", "" ],
+                    [ "Dimanche", "", "" ],
+                ];
 
+            // restaurant.hours is a 2 dimensions array, for each values in each array we have to split the values to treat hours and minutes separately. Minutes has non human format beacause the half hour is represented by 5 instead of 30, so we multiplicate minutes by 6. If there is no minutes we write 00 to keep the same format.
             this.restaurant.hours.forEach( ( aElt, i ) => {
                 iCountDay = i;
                 aElt.forEach( ( iElt, j ) => {
@@ -131,13 +118,14 @@ let oRestaurantDetails = Vue.component( "restaurant-details", {
 
                     if ( aSplited.length === 2 ) {
                         aSplited[ 1 ] *= 6;
-                        sPrepared = `${ aSplited[ 0 ] }:${ aSplited[ 1 ] }`;
+                        sFormated = `${ aSplited[ 0 ] }:${ aSplited[ 1 ] }`;
                     } else {
-                        sPrepared = `${ aSplited[ 0 ] }:00`;
+                        sFormated = `${ aSplited[ 0 ] }:00`;
                     }
-                    this.restaurant.hours[ iCountDay ][ iCountHour ] = sPrepared;
+                    aFormatedHours[ iCountDay ][ iCountHour + 1 ] = sFormated;
                 } );
             } );
+            this.restaurant.hours = aFormatedHours;
         },
         showError( oError ) {
             this.loaded = true;
