@@ -1,0 +1,216 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2017-01-26T18:32:26.943Z",
+	"__export_source": "insomnia.desktop.app:v4.2.0",
+	"resources": [
+		{
+			"_id": "wrk_iuipibjaMCttrcJVkycw59eK",
+			"parentId": null,
+			"modified": 1485455503290,
+			"created": 1476989660134,
+			"name": "RIA-Egzamen",
+			"description": "API Express, MongoDB & VueJS for exam RIA - 25 Jan 2017",
+			"certificates": [],
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_iuir4060HKRWWAQMuuSskAQf",
+			"parentId": "wrk_iuipibjaMCttrcJVkycw59eK",
+			"modified": 1485455412925,
+			"created": 1476992351448,
+			"name": "Base Environment",
+			"data": {},
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_iuir5ccxErYxdQCGaD73k2rn",
+			"parentId": "wrk_iuipibjaMCttrcJVkycw59eK",
+			"modified": 1485455412920,
+			"created": 1476992413905,
+			"name": "Default Jar",
+			"cookies": [],
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"parentId": "wrk_iuipibjaMCttrcJVkycw59eK",
+			"modified": 1485455412919,
+			"created": 1485187946164,
+			"name": "Egzamen",
+			"environment": {},
+			"metaSortKey": -1485187946164,
+			"_type": "request_group"
+		},
+		{
+			"_id": "fld_a411f940b6e04126b0a5b55d8221d2bb",
+			"parentId": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"modified": 1485455412918,
+			"created": 1485254867512,
+			"name": "System",
+			"environment": {},
+			"metaSortKey": -1485255090117,
+			"_type": "request_group"
+		},
+		{
+			"_id": "req_21196181475d467ba0789f91848bacb6",
+			"parentId": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"modified": 1485455412916,
+			"created": 1485211089701,
+			"url": "http://192.168.33.10/restaurants/58872c6c936aef075248ea11",
+			"name": "Delete",
+			"method": "DELETE",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1485211089701,
+			"_type": "request"
+		},
+		{
+			"_id": "req_74e4f49e13e94026aba95a6e6ae104eb",
+			"parentId": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"modified": 1485455412915,
+			"created": 1485208835215,
+			"url": "http://192.168.33.10/restaurants/58872c6c936aef075248ea11",
+			"name": "Update",
+			"method": "PATCH",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"address\": \"Rue des Sorbiers 6, 4140 Sprimont\",\n\t\"latitude\": 50.498,\n\t\"longitude\": 5.667,\n\t\"hours\": [\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t],\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t],\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t],\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t],\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t],\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t],\n\t\t[\n\t\t\t10,\n\t\t\t23\n\t\t]\n\t]\n}"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1485208835215,
+			"_type": "request"
+		},
+		{
+			"_id": "req_c4ec70989b57410aad1a82a07960383d",
+			"parentId": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"modified": 1485455412914,
+			"created": 1485206482152,
+			"url": "http://192.168.33.10/restaurants",
+			"name": "Create",
+			"method": "POST",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n    \"slug\": \"sprimont\",\n    \"name\": \"Sprimont\",\n    \"address\": \"Rue des Sorbiers 6, 4140 Sprimont \",\n    \"latitude\": 50.500,\n    \"longitude\": 5.667,\n    \"hours\": [\n      [\n        10,\n        23\n      ],\n      [\n        10,\n        23\n      ],\n      [\n        10,\n        23\n      ],\n      [\n        10,\n        23\n      ],\n      [\n        10,\n        23\n      ],\n      [\n        10,\n        23\n      ],\n      [\n        10,\n        23\n      ]\n    ]\n }"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1485206482152,
+			"_type": "request"
+		},
+		{
+			"_id": "req_iyaak7zn4fAj4PeyAXB6zUdg",
+			"parentId": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"modified": 1485455412913,
+			"created": 1485187954547,
+			"url": "http://192.168.33.10/restaurants",
+			"name": "List",
+			"method": "GET",
+			"body": {},
+			"parameters": [
+				{
+					"name": "latitude",
+					"value": "50.500"
+				},
+				{
+					"name": "longitude",
+					"value": "5.667"
+				},
+				{
+					"name": "radius",
+					"value": "20"
+				}
+			],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1485193878637.5,
+			"_type": "request"
+		},
+		{
+			"_id": "req_iyahm63sXqUd5Nt8VQTsF58w",
+			"parentId": "fld_iyaak1iseTgCcTSmFjT4WvUh",
+			"modified": 1485455412911,
+			"created": 1485199802728,
+			"url": "http://192.168.33.10/restaurants/5886876571eab90af499c0bb",
+			"name": "Details",
+			"method": "GET",
+			"body": {},
+			"parameters": [],
+			"headers": [],
+			"authentication": {
+				"username": "",
+				"password": ""
+			},
+			"metaSortKey": -1485199802728,
+			"_type": "request"
+		},
+		{
+			"_id": "req_198a2344360a42b9a25d3b4bf2128e8e",
+			"parentId": "fld_a411f940b6e04126b0a5b55d8221d2bb",
+			"modified": 1485455412910,
+			"created": 1485255012952,
+			"url": "http://192.168.33.10/sys/error",
+			"name": "Error",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1485254915052,
+			"_type": "request"
+		},
+		{
+			"_id": "req_c295552bf97a40feaae0b689e7ff2c64",
+			"parentId": "fld_a411f940b6e04126b0a5b55d8221d2bb",
+			"modified": 1485455412909,
+			"created": 1485254914952,
+			"url": "http://192.168.33.10/sys/ping",
+			"name": "Ping",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1485254914952,
+			"_type": "request"
+		},
+		{
+			"_id": "req_ee25545e29994ebba18792a730c045a8",
+			"parentId": "fld_a411f940b6e04126b0a5b55d8221d2bb",
+			"modified": 1485455412907,
+			"created": 1485254971909,
+			"url": "http://192.168.33.10/sys/echo",
+			"name": "Echo",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1485254915002,
+			"_type": "request"
+		}
+	]
+}
